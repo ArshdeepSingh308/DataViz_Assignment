@@ -1,0 +1,143 @@
+<html>
+   <head>
+      <title> Arshdeep Singh - Assignment</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.9.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@4.0.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.2.1"></script>
+      <style>
+         body {
+         font-family: sans-serif;
+         }
+      </style>
+   </head>
+   <body>
+      <table style="width: 850px;" cellspacing="5" cellpadding="5">
+         <tbody>
+            <tr>
+               <td style="width: 200px; vertical-align: top;"><strong>Name:&nbsp;</strong></td>
+               <td style="vertical-align: top;">Arshdeep Singh</td>
+            </tr>
+            <tr>
+               <td style="vertical-align: top;"><strong>Student Number:</strong></td>
+               <td style="vertical-align: top;">19203890</td>
+            </tr>
+            <tr>
+               <td style="vertical-align: top;"><strong>Dataset description:</strong></td>
+               <td style="vertical-align: top;"> <a href="https://data.gov.ie/dataset/2016-make-model-year-failures-at-nct">NCT Failure Rates 2016</a>
+                <br>
+                <p>This dataset holds details of vehicle make, model and the year. Along with these it contains numerous tests which were performed on the vehicle. It has many attributes that gives information about which make, model and year failed in the NCT tests including Vehicle and Safety Equipment, Lighting and Electrical, Braking Equipment etc. </p>
+              </td>
+            </tr>
+            <tr>
+               <td style="vertical-align: top;"><strong>Question 2</strong></td>
+               <td style="vertical-align: top;">How the Vehicle Makers are performing in the test which can not be completed or belong to other categories.</td>
+            </tr>
+         </tbody>
+      </table>
+      <hr />
+      <div id="vis"></div>
+      <hr />
+      <table style="width: 850px;" cellspacing="5" cellpadding="5">
+         <tbody>
+            <tr>
+               <td style="width: 200px; vertical-align: top;"><strong>Description:&nbsp;</strong></td>
+               <td style="vertical-align: top;">This is a horizontal bar chart showing sum of tasks that can’t be performed anymore or the tasks that belong to other category besides the categories provided in the dataset. Toyota is shown in different colour, the reason to which is described below. </td>
+            </tr>
+            <tr>
+               <td style="vertical-align: top;"><strong>Insight:</strong></td>
+               <td style="vertical-align: top;">As I mentioned about Toyota having a high FAIL % is due to the reason that the maker is performing extremely high number of tests on their vehicles and hence the percentage goes high. Toyota is represented in a different colour to express the high FAIL % thought. Toyota is highly liked by a major population, the reason being, it performs extensive tests on its vehicle. It is also, very interesting to note that, Volkswagen and Ford both were in the top Vehicle Maker list and now are on top of the incompletable and others test attributes. The same reason applies to these companies as well. To be able to produce the best product, they test their product in all possible ways and any for possible number of times. Hence, they have a great demand in the population. </td>
+            </tr>
+            <tr>
+               <td style="vertical-align: top;"><strong>Design considerations</strong></td>
+               <td style="vertical-align: top;">I have used horizontal bar charts for this visualization as it is easier for us to compare things when they start at a same base. The bars are also sorted to make it more readable. Bar charts should be used when performing analysis of quantitative attributes. The topmost bar has been coloured in different colour to evident the fact that high number of tests are performed on the vehicles. Colouring one bar different makes it stand out from the rest and immediately catches the attention of the reader. <br>
+                    <br>The bars are sorted on their respective x-axis values and hence, the vehicle makers are not the same on y-axis in both the graphs. Sorting both the graphs on same value would have made it more readable and easy to understand but the graphs would lose the essence of the question being answered. Another alternative to use is parallel coordinates but it will definitely increase the complexity of the graph and it must be ensured that the audience for whom the graph is intended understands the nature of graph.<br>
+              </td>
+            </tr>
+            <tr>
+               <td style="width: 200px; vertical-align: top;"><strong>Data filtering and transformation:&nbsp;</strong></td>
+               <td style="vertical-align: top;">For this graph, I have filtered out the rows whith value of OTHER > 1 and Incompletable > 2. These numbers have been picked after a careful look into the dataset. Using these two constraints, I was able to reduce the number of rows from the graphs that had just 1 or no value.</td>
+            </tr>
+         </tbody>
+      </table>
+      <script type="text/javascript">
+        var yourVlSpec =  {
+            "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+            "title":{
+                "text":"Vehicle Make vs. Other and Incompletable Tests",
+                "anchor":"middle",
+                "fontSize": 18     
+                },
+            "data": {
+                "url": "https://raw.githubusercontent.com/ArshdeepSingh308/DataViz_Assignment/master/Data.csv"
+            },
+            "transform": [
+                {
+                "filter": "datum.OTHER > 1"
+                },
+                {
+                "filter": "datum.Incompletable > 2"
+                }
+            ],
+            "hconcat": [
+                {
+                "mark": "bar",
+                "encoding": {
+                    "x":{
+                    "field": "Incompletable",
+                    "type":"quantitative",
+                    "aggregate" : "sum"
+                    },
+                    "y":{
+                    "field":"VehicleMake",
+                    "type":"nominal",
+                    "sort":{
+                        "op": "sum",
+                        "field" : "Incompletable",
+                        "order":"descending"
+                    },
+                    "axis":{
+                        "title":"Vehicle Make"
+                    }
+                    },
+                    "color": { 
+                    "condition": { 
+                        "test": "datum.VehicleMake == 'TOYOTA'", "value": "#FF7F50" 
+                    }, 
+                    "value": "#00C5CD" 
+                    }
+                }
+                },
+                {
+                "mark": "bar",
+                "encoding": {
+                    "x":{
+                    "field": "OTHER",
+                    "type":"quantitative",
+                    "aggregate" : "sum"
+                    },
+                    "y":{
+                    "field":"VehicleMake",
+                    "type":"nominal",
+                    "sort":{
+                        "op": "sum",
+                        "field" : "OTHER",
+                        "order":"descending"
+                    },
+                    "axis":{
+                        "title":"Vehicle Make"
+                    }
+                    },
+                    "color": { 
+                    "condition": { 
+                        "test": "datum.VehicleMake == 'TOYOTA'", "value": "#FF7F50" 
+                    }, 
+                    "value": "#00C5CD" 
+                    }
+                }
+                }
+            ]
+            }
+            vegaEmbed("#vis", yourVlSpec);
+      </script>
+   </body>
+</html>

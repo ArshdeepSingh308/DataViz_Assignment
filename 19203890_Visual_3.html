@@ -1,0 +1,125 @@
+<html>
+   <head>
+      <title> Arshdeep Singh - Assignment</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.9.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@4.0.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.2.1"></script>
+      <style>
+         body {
+         font-family: sans-serif;
+         }
+      </style>
+   </head>
+   <body>
+      <table style="width: 850px;" cellspacing="5" cellpadding="5">
+         <tbody>
+            <tr>
+               <td style="width: 200px; vertical-align: top;"><strong>Name:&nbsp;</strong></td>
+               <td style="vertical-align: top;">Arshdeep Singh</td>
+            </tr>
+            <tr>
+               <td style="vertical-align: top;"><strong>Student Number:</strong></td>
+               <td style="vertical-align: top;">19203890</td>
+            </tr>
+            <tr>
+               <td style="vertical-align: top;"><strong>Dataset description:</strong></td>
+               <td style="vertical-align: top;"> <a href="https://data.gov.ie/dataset/2016-make-model-year-failures-at-nct">NCT Failure Rates 2016</a>
+                <br>
+                <p>This dataset holds details of vehicle make, model and the year. Along with these it contains numerous tests which were performed on the vehicle. It has many attributes that gives information about which make, model and year failed in the NCT tests including Vehicle and Safety Equipment, Lighting and Electrical, Braking Equipment etc.  </p>
+              </td>
+            </tr>
+            <tr>
+               <td style="vertical-align: top;"><strong>Question 3</strong></td>
+               <td style="vertical-align: top;">What does the related test attributes in the dataset tells about the Vehicle Makers.</td>
+            </tr>
+         </tbody>
+      </table>
+      <hr />
+      <div id="vis"></div>
+      <hr />
+      <table style="width: 850px;" cellspacing="5" cellpadding="5">
+         <tbody>
+            <tr>
+               <td style="width: 200px; vertical-align: top;"><strong>Description:&nbsp;</strong></td>
+               <td style="vertical-align: top;">For this question I have used scatter plot. Three of the related attributes, ‘Side Slip Test’, ‘Wheels and Tyres’ and ‘Brake Test’ are compared against each other for 3 different Vehicle Makers. Each circle in the graph represents a row of the dataset. </td>
+            </tr>
+            <tr>
+               <td style="vertical-align: top;"><strong>Insight:</strong></td>
+               <td style="vertical-align: top;">The graphs give a greater insight into the relation between the test which are somehow related to each other and which test are the makers more inclined in. It is quite indicative that the density is quite high at the origin and which should be true because a company will always ensure to test their vehicle before launching. <br>
+                <br>As could be observed in some graphs the distribution is spread in different directions. This gives an idea to the viewer about the nature of test a company is more likely to perform and what they prioritize in building their vehicle. As can be seen from the 1st graph in 2nd row Volkswagen has a more spread towards the slip and slide test and Toyota on other hand performs brake test quite intensively. These scatter plot even answer the question of the FAIL % of top vehicle makers being high. As can be seen the spread of Toyota and Volkswagen is quite high as compared to that of BMW and hence, the possibility of failing a test is higher. These graphs provide a great insight into the type of test a maker is more interested in.
+                 </td>
+            </tr>
+            <tr>
+               <td style="vertical-align: top;"><strong>Design considerations</strong></td>
+               <td style="vertical-align: top;">I have used a scatter plot as it is advantageous to understand, considering two distinct attributes being used at once. We can easily comprehend the location and meaning of the data point in the graph. <br>
+                <br>The only disadvantage of using a scatter plot is that there is major overlapping of the data. The data is not sufficiently spread and hence provides quite less information about the data point. Scatter plot are also a great way to visualize quantitative data. Colour encoding for the vehicle makers is done as it makes it evident and easy to comprehend, which dot represents which maker. Also, I decided to choose just three of the Vehicle Makers because I wanted lay more emphasis on understanding the relations between the makers and the tests that are performed.<br>
+                <br>Alternatively, binning of the data could be done that would have made the data less dense, but it would compromise on the noticeable trend in the graph. Anther option is to use a heatmap. This will be a great way to look at the values which are quite related and like each other since, they all will lie n the same bin, but again, the information provided by an individual point will be lost.<br>
+                
+              </td>
+            </tr>
+            <tr>
+               <td style="width: 200px; vertical-align: top;"><strong>Data filtering and transformation:&nbsp;</strong></td>
+               <td style="vertical-align: top;">For this question, the dataset has been filtered on the following conditions: brake test, side slip test and suspension test all must be greater than 0.</td>
+            </tr>
+         </tbody>
+      </table>
+      <script type="text/javascript">
+        var yourVlSpec =  {
+            "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+            "data": {
+                "url": "https://raw.githubusercontent.com/ArshdeepSingh308/DataViz_Assignment/master/Data.csv",
+                "format": {
+                "type": "csv"
+                }
+            },
+            "transform": [
+                {
+                "filter":"datum.Brake_Test > 0"
+                },
+                {
+                "filter":"datum.Side_Slip_Test > 0"
+                },
+                {
+                "filter":"datum.Suspension_Test > 0"
+                }
+            ],
+            "repeat":{
+                "row": ["Side_Slip_Test", "Brake_Test", "Suspension_Test"],
+                "column": ["Side_Slip_Test", "Brake_Test", "Suspension_Test"]
+            },
+            "spec":{
+                "mark" : "circle",
+                "encoding": {
+                "x":{
+                    "field": {"repeat": "column"}, 
+                    "type": "quantitative",
+                    "scale":{ "zero":false }
+                },
+                "y":{ 
+                    "field": {"repeat": "row"}, 
+                    "type": "quantitative",
+                    "axis": {"minExtent": 30},
+                    "scale":{"zero":false }
+                },
+                    "color":{
+                    "field":"VehicleMake", "type":"nominal",
+                    "scale":{
+                        "domain":["BMW","VOLKSWAGEN", "TOYOTA"], "range":["red","cyan", "green" ]
+                        }
+                    },
+                    "tooltip":{
+                "field":"VehicleModel",
+                "type":"nominal"
+                }
+                }
+            },
+                "title": {
+            "text": "Distribution of 3 different Types of Tests for 3 different Vehicle Make",
+            "anchor": "middle",
+            "fontSize": 14
+            }
+            }
+            vegaEmbed("#vis", yourVlSpec);
+      </script>
+   </body>
+</html>
