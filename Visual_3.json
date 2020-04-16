@@ -1,0 +1,56 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+  "data": {
+    "url": "https://raw.githubusercontent.com/ArshdeepSingh308/DataViz_Assignment/master/Data.csv",
+    "format": {
+      "type": "csv"
+    }
+  },
+  "transform": [
+    {
+      "filter":"datum.Brake_Test > 0"
+    },
+    {
+      "filter":"datum.Side_Slip_Test > 0"
+    },
+    {
+      "filter":"datum.Suspension_Test > 0"
+    }
+  ],
+  "repeat":{
+    "row": ["Side_Slip_Test", "Brake_Test", "Suspension_Test"],
+    "column": ["Side_Slip_Test", "Brake_Test", "Suspension_Test"]
+  },
+  "spec":{
+    "mark" : "circle",
+    "encoding": {
+      "x":{
+        "field": {"repeat": "column"}, 
+        "type": "quantitative",
+        "scale":{ "zero":false }
+      },
+      "y":{ 
+        "field": {"repeat": "row"}, 
+        "type": "quantitative",
+        "axis": {"minExtent": 30},
+        "scale":{"zero":false }
+      },
+        "color":{
+        "field":"VehicleMake", "type":"nominal",
+        "scale":{
+            "domain":["BMW","VOLKSWAGEN", "TOYOTA"], "range":["red","cyan", "green" ]
+            }
+        },
+        "tooltip":{
+      "field":"VehicleModel",
+      "type":"nominal"
+    }
+    }
+  },
+    "title": {
+  "text": "Distribution of 3 different Types of Tests for 3 different Vehicle Make",
+  "anchor": "middle",
+  "fontSize": 14
+}
+}
+

@@ -1,0 +1,58 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+  "title":{
+      "text":"NCT Pass and Fail % 2016",
+      "anchor":"middle",
+      "fontSize": 15     
+    },
+  "data": {
+    "url": "https://raw.githubusercontent.com/ArshdeepSingh308/DataViz_Assignment/master/Data.csv",
+    "format": {
+      "type": "csv"
+    }
+  },
+  "transform": [
+    {
+      "filter": "datum.PASS_p > 0 && datum.PASS_p < 100"
+    },
+    {
+        "filter":"datum.FAIL_p > 0 && datum.FAIL_p < 100"
+    }
+  ],
+  "repeat":{
+    "row": ["PASS_p", "FAIL_p"]
+  },
+  "spec":{
+    "mark" : "bar",
+    "encoding": {
+      "x":{
+
+        "field":{"repeat": "row"} ,
+        "type":"quantitative",
+        "bin": {"maxbins": 30}
+      },
+      "y":{
+        "aggregate": "count", 
+        "field": "*", 
+        "type": "quantitative",
+        "stack" : null,
+        "axis": {"title": "Number of records"}
+      },
+      "color":{
+        "field":"VehicleMake", "type":"nominal",
+        "scale":{
+            "domain":["FORD","VOLKSWAGEN", "TOYOTA"], "range":["cyan","green", "pink" ]
+            }
+        }
+    }
+  },
+  "config": {
+    "mark": {"opacity": 0.6},
+    "axis": {
+      "labelFontSize": 10,
+      "titleFontSize": 12,
+      "titlePadding": 10
+    }
+  }
+}
+

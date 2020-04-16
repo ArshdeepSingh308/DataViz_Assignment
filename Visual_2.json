@@ -1,0 +1,77 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+  "title":{
+      "text":"Vehicle Make vs. Other and Incompletable Tests",
+      "anchor":"middle",
+      "fontSize": 18     
+    },
+  "data": {
+    "url": "https://raw.githubusercontent.com/ArshdeepSingh308/DataViz_Assignment/master/Data.csv"
+  },
+  "transform": [
+    {
+      "filter": "datum.OTHER > 1"
+    },
+    {
+      "filter": "datum.Incompletable > 2"
+    }
+  ],
+  "hconcat": [
+    {
+      "mark": "bar",
+      "encoding": {
+        "x":{
+          "field": "Incompletable",
+          "type":"quantitative",
+          "aggregate" : "sum"
+        },
+        "y":{
+          "field":"VehicleMake",
+          "type":"nominal",
+          "sort":{
+            "op": "sum",
+            "field" : "Incompletable",
+            "order":"descending"
+          },
+          "axis":{
+            "title":"Vehicle Make"
+          }
+        },
+        "color": { 
+          "condition": { 
+            "test": "datum.VehicleMake == 'TOYOTA'", "value": "#FF7F50" 
+          }, 
+          "value": "#00C5CD" 
+        }
+      }
+    },
+    {
+      "mark": "bar",
+      "encoding": {
+        "x":{
+          "field": "OTHER",
+          "type":"quantitative",
+          "aggregate" : "sum"
+        },
+        "y":{
+          "field":"VehicleMake",
+          "type":"nominal",
+          "sort":{
+            "op": "sum",
+            "field" : "OTHER",
+            "order":"descending"
+          },
+          "axis":{
+            "title":"Vehicle Make"
+          }
+        },
+        "color": { 
+          "condition": { 
+            "test": "datum.VehicleMake == 'TOYOTA'", "value": "#FF7F50" 
+          }, 
+          "value": "#00C5CD" 
+        }
+      }
+    }
+  ]
+}
